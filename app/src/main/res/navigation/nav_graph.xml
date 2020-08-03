@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.badr.recipe_app.Fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.badr.recipe_app.Fragments.FavoritesFragment"
@@ -20,4 +24,14 @@
         android:name="com.badr.recipe_app.Fragments.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.badr.recipe_app.Fragments.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="recipe"
+            app:argType="com.badr.recipe_app.Model.Recipe"
+            app:nullable="true" />
+    </fragment>
 </navigation>

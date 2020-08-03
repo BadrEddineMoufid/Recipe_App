@@ -10,8 +10,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.badr.recipe_app.Fragments.HomeFragment;
+import com.badr.recipe_app.Fragments.HomeFragmentDirections;
 import com.badr.recipe_app.Model.Recipe;
 import com.badr.recipe_app.R;
 import com.bumptech.glide.Glide;
@@ -87,11 +90,18 @@ public class recyclerViewAdapter2 extends RecyclerView.Adapter<recyclerViewAdapt
 
         @Override
         public void onClick(View v) {
+            //getting position and currentRecipe clicked from recipeList
             int pos = getAdapterPosition();
             Recipe currentRecipe = recipeList.get(pos);
 
             //debug
             Log.d(TAG, "on item clicked: " + currentRecipe.getTitle() + "\n" + currentRecipe.getSummary());
+
+            //navigate to details fragment && passing currentRecipe object to be displayed
+            //creating action with currentRecipe
+            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(currentRecipe);
+            Navigation.findNavController(v).navigate(action);
+
         }
     }
 }

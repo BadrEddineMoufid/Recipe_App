@@ -45,6 +45,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private recyclerViewAdapter2 recyclerViewAdapter2;
     private List<Recipe> recipeList2;
 
+    public HomeFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +123,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     private void getRandomRecipesWithTags(String tags){
-        Call<RandomRecipe> getRandomRecipesWithTags = apiInterface.getRandomRecipesWithTags(5, Utils.API_KEY, tags);
+        int number = 10;
+
+        Call<RandomRecipe> getRandomRecipesWithTags = apiInterface.getRandomRecipesWithTags(number, Utils.API_KEY, tags);
 
         getRandomRecipesWithTags.enqueue(new Callback<RandomRecipe>() {
             @Override
@@ -149,6 +154,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         //calling API
         getRandomRecipesWithTags(text);
+
+
     }
 
     @Override

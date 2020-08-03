@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.badr.recipe_app.Fragments.HomeFragmentDirections;
 import com.badr.recipe_app.Model.RandomRecipe;
 import com.badr.recipe_app.Model.Recipe;
 import com.badr.recipe_app.R;
@@ -90,9 +92,14 @@ public class randomRecipesAdapter extends RecyclerView.Adapter<randomRecipesAdap
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Recipe recipe = randomRecipeList.get(position);
+            Recipe currentRecipe = randomRecipeList.get(position);
 
-            Log.d(TAG, "on item clicked: " + recipe.getTitle() + "\n" + recipe.getSummary());
+            Log.d(TAG, "on item clicked: " + currentRecipe.getTitle() + "\n" + currentRecipe.getSummary());
+
+            //navigate to details fragment && passing currentRecipe object to be displayed
+            //creating action with currentRecipe
+            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(currentRecipe);
+            Navigation.findNavController(v).navigate(action);
         }
     }
 }
