@@ -19,10 +19,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.badr.recipe_app.Adapters.ingredientAdapter;
+import com.badr.recipe_app.Adapters.instructionsAdapter;
 import com.badr.recipe_app.Model.ExtendedIngredient;
 import com.badr.recipe_app.Model.Recipe;
+import com.badr.recipe_app.Model.Step;
 import com.badr.recipe_app.R;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,9 @@ public class DetailsFragment extends Fragment {
     private List<ExtendedIngredient> extendedIngredientList;
     TextView recipeTitle, recipeScores;
     ImageView recipeImage;
-
+    private List<Step> stepList;
+    private RecyclerView instructionRecyclerView;
+    private instructionsAdapter instructionsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,7 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+
         Recipe recipe = null;
         if(getArguments() != null){
             DetailsFragmentArgs args = DetailsFragmentArgs.fromBundle(getArguments());
@@ -57,8 +63,11 @@ public class DetailsFragment extends Fragment {
             Log.d(TAG, "received args from HomeFragment : " + recipe.getTitle() );
 
             extendedIngredientList = recipe.getExtendedIngredients();
+            stepList = recipe.getAnalyzedInstructions().get(0).getSteps();
         }else {
             extendedIngredientList = new ArrayList<>();
+            stepList = new ArrayList<>();
+            Snackbar.make(rootView, "an error occurred check logs", Snackbar.LENGTH_LONG).show();
         }
 
         assert recipe != null;
@@ -70,24 +79,37 @@ public class DetailsFragment extends Fragment {
 
 
     private void setupUi(View rootView, Recipe recipe){
+        //setting up ingredientsRecyclerView
         ingredientsRecyclerView = rootView.findViewById(R.id.ingredient_recyclerView);
         ingredientsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        //setting up ingredientAdapter
         ingredientAdapter = new ingredientAdapter(extendedIngredientList, getContext());
         ingredientsRecyclerView.setAdapter(ingredientAdapter);
         ingredientAdapter.notifyDataSetChanged();
 
+        //setting up instructionsRecyclerView
+        instructionRecyclerView = rootView.findViewById(R.id.instructions_recyclerView);
+        instructionRecyclerView.setHasFixedSize(true);
+        instructionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //setting up instructionsAdapter
+        instructionsAdapter = new instructionsAdapter(getContext(),stepList);
+        instructionRecyclerView.setAdapter(instructionsAdapter);
+        instructionsAdapter.notifyDataSetChanged();
+
+        //finding views
         recipeTitle = rootView.findViewById(R.id.recipe_title);
         recipeScores = rootView.findViewById(R.id.recipe_scores);
         recipeImage = rootView.findViewById(R.id.recipe_image);
 
+        //setting texts
         recipeTitle.setText(recipe.getTitle());
-
         String scores = "Spoonacular Score: " + recipe.getSpoonacularScore() + "\nHealth Score: " + recipe.getHealthScore();
         recipeScores.setText(scores);
 
+        //setting image
         if(recipe.getImage() != null){
             Glide.with(getContext()).load(recipe.getImage()).into(recipeImage);
         }else{

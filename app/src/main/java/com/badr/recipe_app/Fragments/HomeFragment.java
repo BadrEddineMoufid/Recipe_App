@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.badr.recipe_app.Adapters.randomRecipesAdapter;
@@ -100,6 +101,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 Log.d(TAG, "on response : " + response.body());
                 Log.d(TAG, "recipeList  size : " + recipeList.size());
 
+                Log.d(TAG, "quota used today in total: " + response.headers().get("X-API-Quota-Used") +
+                        " quota used by this request: " + response.headers().get("X-API-Quota-Request"));
 
                 //get list from response body
                 assert response.body() != null;
@@ -136,6 +139,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 recyclerViewAdapter2.setData(recipeList2);
                 recyclerView2.setAdapter(recyclerViewAdapter2);
                 recyclerViewAdapter2.notifyDataSetChanged();
+
+                Log.d(TAG, "quota used today in total: " + response.headers().get("X-API-Quota-Used") +
+                        " quota used by this request: " + response.headers().get("X-API-Quota-Request"));
 
             }
 
