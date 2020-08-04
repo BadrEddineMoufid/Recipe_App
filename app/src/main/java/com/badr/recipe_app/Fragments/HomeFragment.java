@@ -45,8 +45,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private recyclerViewAdapter2 recyclerViewAdapter2;
     private List<Recipe> recipeList2;
 
-    public HomeFragment() {
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
