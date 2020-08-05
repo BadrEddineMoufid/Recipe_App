@@ -1,11 +1,12 @@
 
 package com.badr.recipe_app.Model;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AnalyzedInstruction {
+public class AnalyzedInstruction implements Serializable {
 
     @SerializedName("name")
     @Expose

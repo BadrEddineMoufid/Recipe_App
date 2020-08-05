@@ -32,8 +32,8 @@ public class randomRecipesAdapter extends RecyclerView.Adapter<randomRecipesAdap
         this.context = context;
 
         //debug
-        Log.d(TAG, "randomRecipeList size: " + randomRecipeList.size());
-        System.out.println("randomRecipeList size: " + randomRecipeList.size());
+        Log.d(TAG, "randomRecipeList size when constructor called: " + randomRecipeList.size());
+
     }
 
     public void setData(List<Recipe> recipes){

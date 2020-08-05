@@ -23,10 +23,15 @@ import android.widget.TextView;
 
 import com.badr.recipe_app.Adapters.ingredientAdapter;
 import com.badr.recipe_app.Adapters.instructionsAdapter;
+import com.badr.recipe_app.Adapters.similarRecipesAdapter;
+import com.badr.recipe_app.ApiClient;
+import com.badr.recipe_app.ApiInterface;
 import com.badr.recipe_app.Model.ExtendedIngredient;
 import com.badr.recipe_app.Model.Recipe;
 import com.badr.recipe_app.Model.Step;
+import com.badr.recipe_app.Model.similarRecipe;
 import com.badr.recipe_app.R;
+import com.badr.recipe_app.Utils;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -34,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailsFragment extends Fragment {
     private static final String TAG = "DetailsFragment";
@@ -42,9 +50,16 @@ public class DetailsFragment extends Fragment {
     private List<ExtendedIngredient> extendedIngredientList;
     TextView recipeTitle, recipeScores, summaryTextView;
     ImageView recipeImage;
+
     private List<Step> stepList;
     private RecyclerView instructionRecyclerView;
     private instructionsAdapter instructionsAdapter;
+
+    private List<similarRecipe> similarRecipeList;
+    private RecyclerView similarRecipesRecyclerView;
+    private similarRecipesAdapter similarRecipesAdapter;
+
+    private ApiInterface apiInterface;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +73,10 @@ public class DetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
+        //apiInterface instance
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        //getting recipe object from passed args
         Recipe recipe = null;
         if(getArguments() != null){
             DetailsFragmentArgs args = DetailsFragmentArgs.fromBundle(getArguments());
@@ -75,15 +94,21 @@ public class DetailsFragment extends Fragment {
             Snackbar.make(rootView, "an error occurred check logs", Snackbar.LENGTH_LONG).show();
         }
 
+        //setting the ui
         assert recipe != null;
         setupUi(rootView, recipe);
 
+        //getting similar recipes
+        getSimilarRecipes(rootView, recipe);
 
         return rootView;
     }
 
 
     private void setupUi(View rootView, Recipe recipe){
+
+
+
         //setting up ingredientsRecyclerView
         ingredientsRecyclerView = rootView.findViewById(R.id.ingredient_recyclerView);
         ingredientsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -132,12 +157,49 @@ public class DetailsFragment extends Fragment {
 
     }
 
+    private void getSimilarRecipes(View view, Recipe recipe){
+        similarRecipesRecyclerView = view.findViewById(R.id.similar_recipes_recyclerView);
+
+        similarRecipeList = new ArrayList<>();
+
+        similarRecipesRecyclerView.setHasFixedSize(true);
+        similarRecipesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        similarRecipesAdapter = new similarRecipesAdapter(getContext());
+
+        String url = "https://api.spoonacular.com/recipes/" + recipe.getId() + "/similar";
+
+        Log.d(TAG, "url: " + url);
+
+        Call<List<similarRecipe>> getSimilarRecipes = apiInterface.getSimilarRecipes(url, Utils.API_KEY);
+        getSimilarRecipes.enqueue(new Callback<List<similarRecipe>>() {
+            @Override
+            public void onResponse(Call<List<similarRecipe>> call, Response<List<similarRecipe>> response) {
+                //debug
+                Log.d(TAG, "similarRecipesList: " + response.body());
+
+                similarRecipeList = response.body();
+                similarRecipesAdapter.setData(similarRecipeList);
+                similarRecipesRecyclerView.setAdapter(similarRecipesAdapter);
+                similarRecipesAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<similarRecipe>> call, Throwable t) {
+                Log.e(TAG, "on failure : " + t.getMessage() + t.toString());
+            }
+        });
+
+
+
+    }
+
     private String cleanString(String text){
         //remove all html tags
         String strRegEx = "<[^>]*>";
         String result = text.replaceAll(strRegEx, " ");
 
-        //go to another line after dot
+        //insert new line after dot
         result = result.replaceAll("\\.\\s?","\\.\n");
 
         //debug

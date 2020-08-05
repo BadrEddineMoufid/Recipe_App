@@ -4,7 +4,9 @@ package com.badr.recipe_app.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Us {
+import java.io.Serializable;
+
+public class Us implements Serializable {
     @Override
     public String toString() {
         return "Us{" +

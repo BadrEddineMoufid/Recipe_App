@@ -1,11 +1,12 @@
 
 package com.badr.recipe_app.Model;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class WinePairing {
+public class WinePairing implements Serializable {
     @Override
     public String toString() {
         return "WinePairing{" +

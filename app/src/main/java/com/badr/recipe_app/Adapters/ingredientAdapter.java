@@ -87,17 +87,20 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
         return (double) tmp / factor;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView ingredientName, ingredientAmount;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+
+
             ingredientName = itemView.findViewById(R.id.ingredient_name);
             ingredientAmount = itemView.findViewById(R.id.ingredient_amount);
 
         }
+
 
     }
 }

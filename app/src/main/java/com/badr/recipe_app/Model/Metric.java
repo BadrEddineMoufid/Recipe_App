@@ -4,7 +4,9 @@ package com.badr.recipe_app.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Metric {
+import java.io.Serializable;
+
+public class Metric implements Serializable {
     @Override
     public String toString() {
         return "Metric{" +
