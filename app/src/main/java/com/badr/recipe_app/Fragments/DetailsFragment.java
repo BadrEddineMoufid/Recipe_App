@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,12 +33,14 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+
 public class DetailsFragment extends Fragment {
     private static final String TAG = "DetailsFragment";
     private RecyclerView ingredientsRecyclerView;
     private ingredientAdapter ingredientAdapter;
     private List<ExtendedIngredient> extendedIngredientList;
-    TextView recipeTitle, recipeScores;
+    TextView recipeTitle, recipeScores, summaryTextView;
     ImageView recipeImage;
     private List<Step> stepList;
     private RecyclerView instructionRecyclerView;
@@ -103,11 +108,18 @@ public class DetailsFragment extends Fragment {
         recipeTitle = rootView.findViewById(R.id.recipe_title);
         recipeScores = rootView.findViewById(R.id.recipe_scores);
         recipeImage = rootView.findViewById(R.id.recipe_image);
+        summaryTextView = rootView.findViewById(R.id.summary_textView);
 
         //setting texts
         recipeTitle.setText(recipe.getTitle());
         String scores = "Spoonacular Score: " + recipe.getSpoonacularScore() + "\nHealth Score: " + recipe.getHealthScore();
         recipeScores.setText(scores);
+
+        //clean the summary from html tags before displaying it
+        summaryTextView.setText(cleanString(recipe.getSummary()));
+
+
+
 
         //setting image
         if(recipe.getImage() != null){
@@ -118,6 +130,20 @@ public class DetailsFragment extends Fragment {
 
 
 
+    }
+
+    private String cleanString(String text){
+        //remove all html tags
+        String strRegEx = "<[^>]*>";
+        String result = text.replaceAll(strRegEx, " ");
+
+        //go to another line after dot
+        result = result.replaceAll("\\.\\s?","\\.\n");
+
+        //debug
+        Log.d(TAG, "clean string : " + result);
+
+        return result;
     }
 
 

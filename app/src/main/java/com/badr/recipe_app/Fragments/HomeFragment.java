@@ -141,7 +141,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 recyclerViewAdapter2.notifyDataSetChanged();
 
                 Log.d(TAG, "quota used today in total: " + response.headers().get("X-API-Quota-Used") +
-                        " quota used by this request: " + response.headers().get("X-API-Quota-Request"));
+                        "\nquota used by this request: " + response.headers().get("X-API-Quota-Request"));
 
             }
 

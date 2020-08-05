@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:backgroundTint="#EFE9E9"
-    android:fillViewport="true"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:backgroundTint="#E4E4E4"
+    android:fillViewport="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,10 +58,47 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
             android:id="@+id/ingredient_recyclerView"
+            android:layout_marginStart="15dp"
             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Summary: "
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="390dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+
+            >
+
+            <TextView
+                android:id="@+id/summary_textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:text="this is a test summary just a fucking test not going to be compiled "
+                android:padding="10dp"
+                android:textSize="17sp"
+                android:textColor="@android:color/secondary_text_light"
+                android:lineHeight="22sp"
+                android:linksClickable="true"
+                android:autoLink="web"
+                />
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

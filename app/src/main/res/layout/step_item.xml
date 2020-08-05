@@ -22,7 +22,7 @@
             tools:text="10"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#ffaa00"
+            android:textColor="#FF0000"
             android:layout_marginEnd="10dp"
             android:fontFamily="sans-serif"
             />

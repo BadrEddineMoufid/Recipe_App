@@ -48,10 +48,29 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
 
 
         //setting data to view
-        holder.ingredientName.setText(currentIngredient.getName());
+
+        String cleaned = cleanIngredientName(currentIngredient.getName());
+        holder.ingredientName.setText(cleaned);
         holder.ingredientAmount.setText(amount);
 
         Log.d(TAG, "amount : " + amount);
+    }
+
+    private String cleanIngredientName(String name){
+        int index = 0;
+        StringBuilder sb = new StringBuilder(name);
+
+        int i = 0;
+        //getting the index of the char that is a space after 20 characters and checking it's not -1
+        //if true then replace that space char with a break line char
+        //if -1 then string doesn't contain any spaces after 20 chars
+        while ( (i = sb.indexOf(" ", i + 20)) != -1) {
+            sb.replace(i, i + 1, "\n");
+            Log.d(TAG,"sb and index : "  +sb.toString() + " " + i);
+        }
+
+        Log.d(TAG,"sb: "  +sb.toString());
+        return sb.toString();
     }
 
     @Override
@@ -60,7 +79,7 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
     }
 
     public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException("number after decimal point not specified");
+        if (places < 0) throw new IllegalArgumentException("number after decimal point not specified in round()");
 
         long factor = (long) Math.pow(10, places);
         value = value * factor;
