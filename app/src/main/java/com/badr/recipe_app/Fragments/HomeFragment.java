@@ -2,11 +2,14 @@ package com.badr.recipe_app.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +30,7 @@ import com.badr.recipe_app.Model.searchRecipes;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,28 +43,28 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private static final String TAG = "HomeFragment";
     ApiInterface apiInterface;
-    private List<Recipe> recipeList;
+    private List<Recipe> recipeList = new ArrayList<>();
     private RecyclerView randomRecipesRecyclerView;
     private randomRecipesAdapter randomRecipesAdapter;
     private RecyclerView recyclerView2;
     private recyclerViewAdapter2 recyclerViewAdapter2;
-    private List<Recipe> recipeList2;
+    private List<Recipe> recipeList2 = new ArrayList<>();
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = getView()!= null ? getView() : inflater.inflate(R.layout.fragment_home, container, false);
 
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
 
         randomRecipesRecyclerView = rootView.findViewById(R.id.random_recipes_recyclerView);
         randomRecipesRecyclerView.setHasFixedSize(true);
@@ -84,12 +88,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         recyclerView2 = rootView.findViewById(R.id.recyclerView2);
         recyclerView2.setHasFixedSize(true);
         recyclerView2.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recipeList2 = new ArrayList<>();
         recyclerViewAdapter2 = new recyclerViewAdapter2(getActivity());
 
-
-
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("randomRecipeList", (Serializable) recipeList);
     }
 
     private void getRandomRecipes(){
@@ -155,13 +163,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //getting the selected item text
         String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(getContext(), "spinner item clicked: " + text , Toast.LENGTH_LONG).show();
 
         //calling API
         getRandomRecipesWithTags(text);
 
-
+        //displaying a toast and debug stuff
+        Toast.makeText(getContext(), "Loading Recipes with: " + text , Toast.LENGTH_LONG).show();
+        Log.d(TAG,"Spinner selected item: " + text);
     }
 
     @Override

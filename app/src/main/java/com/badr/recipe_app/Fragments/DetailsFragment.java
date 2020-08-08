@@ -48,8 +48,8 @@ public class DetailsFragment extends Fragment {
     private RecyclerView ingredientsRecyclerView;
     private ingredientAdapter ingredientAdapter;
     private List<ExtendedIngredient> extendedIngredientList;
-    TextView recipeTitle, recipeScores, summaryTextView;
-    ImageView recipeImage;
+    private TextView recipeTitle, recipeScores, summaryTextView;
+    private ImageView recipeImage;
 
     private List<Step> stepList;
     private RecyclerView instructionRecyclerView;
@@ -64,7 +64,8 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //apiInterface instance
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
     }
 
     @Override
@@ -73,12 +74,12 @@ public class DetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
-        //apiInterface instance
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
 
         //getting recipe object from passed args
         Recipe recipe = null;
         if(getArguments() != null){
+
             DetailsFragmentArgs args = DetailsFragmentArgs.fromBundle(getArguments());
 
             recipe = args.getRecipe();
@@ -86,8 +87,11 @@ public class DetailsFragment extends Fragment {
             assert recipe != null;
             Log.d(TAG, "received args from HomeFragment : " + recipe.getTitle() );
 
+            //getting stepList and Ingredients from recipe object
             extendedIngredientList = recipe.getExtendedIngredients();
             stepList = recipe.getAnalyzedInstructions().get(0).getSteps();
+
+
         }else {
             extendedIngredientList = new ArrayList<>();
             stepList = new ArrayList<>();
@@ -106,8 +110,6 @@ public class DetailsFragment extends Fragment {
 
 
     private void setupUi(View rootView, Recipe recipe){
-
-
 
         //setting up ingredientsRecyclerView
         ingredientsRecyclerView = rootView.findViewById(R.id.ingredient_recyclerView);
@@ -167,9 +169,10 @@ public class DetailsFragment extends Fragment {
         similarRecipesAdapter = new similarRecipesAdapter(getContext());
 
         String url = "https://api.spoonacular.com/recipes/" + recipe.getId() + "/similar";
-
+        //debug
         Log.d(TAG, "url: " + url);
 
+        //API call
         Call<List<similarRecipe>> getSimilarRecipes = apiInterface.getSimilarRecipes(url, Utils.API_KEY);
         getSimilarRecipes.enqueue(new Callback<List<similarRecipe>>() {
             @Override

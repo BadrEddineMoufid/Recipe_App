@@ -43,21 +43,26 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
         if(currentIngredient.getUnit() != null){
             amount += currentIngredient.getUnit()  ;
         }else{
-            amount += currentIngredient.getMeasures().getMetric().getUnitLong();
+            amount.concat(currentIngredient.getMeasures().getMetric().getUnitLong());
         }
 
 
         //setting data to view
 
-        String cleaned = cleanIngredientName(currentIngredient.getName());
-        holder.ingredientName.setText(cleaned);
+
+        holder.ingredientName.setText(cleanIngredientName(currentIngredient.getName() ));
         holder.ingredientAmount.setText(amount);
 
         Log.d(TAG, "amount : " + amount);
     }
 
+    @Override
+    public int getItemCount() {
+        return extendedIngredientList.size();
+    }
+
     private String cleanIngredientName(String name){
-        int index = 0;
+
         StringBuilder sb = new StringBuilder(name);
 
         int i = 0;
@@ -66,20 +71,18 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
         //if -1 then string doesn't contain any spaces after 20 chars
         while ( (i = sb.indexOf(" ", i + 20)) != -1) {
             sb.replace(i, i + 1, "\n");
-            Log.d(TAG,"sb and index : "  +sb.toString() + " " + i);
+            //debug shiit
+            Log.d(TAG,"sb and index : "  + sb.toString() + " " + i);
         }
 
+        //debug shit
         Log.d(TAG,"sb: "  +sb.toString());
         return sb.toString();
     }
 
-    @Override
-    public int getItemCount() {
-        return extendedIngredientList.size();
-    }
-
     public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException("number after decimal point not specified in round()");
+
+        if (places < 0) throw new IllegalArgumentException("param places invalid: " + places);
 
         long factor = (long) Math.pow(10, places);
         value = value * factor;
