@@ -89,7 +89,12 @@ public class DetailsFragment extends Fragment {
 
             //getting stepList and Ingredients from recipe object
             extendedIngredientList = recipe.getExtendedIngredients();
-            stepList = recipe.getAnalyzedInstructions().get(0).getSteps();
+
+            if(recipe.getAnalyzedInstructions().size() == 0){
+                stepList = new ArrayList<>();
+            }else{
+                stepList = recipe.getAnalyzedInstructions().get(0).getSteps();
+            }
 
 
         }else {

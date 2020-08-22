@@ -1,15 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.UserFragment">
+    tools:context=".Fragments.UserFragment"
+    android:orientation="vertical"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="user fragment"
-        android:textSize="17sp" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        >
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/userFragment_user_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            />
+
+        <TextView
+            android:id="@+id/userFragment_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Display User name"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:textSize="22sp"
+            android:textColor="#151515"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="60dp"
+        android:text="Change your name"
+        android:textSize="22sp"
+        android:textColor="#151515"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Change your Password"
+        android:textSize="22sp"
+        android:textColor="#151515"
+        />
+
+</LinearLayout>

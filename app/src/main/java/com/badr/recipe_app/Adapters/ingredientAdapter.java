@@ -66,7 +66,7 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
         StringBuilder sb = new StringBuilder(name);
 
         int i = 0;
-        //getting the index of the char that is a space after 20 characters and checking it's not -1
+        //getting the index of SPACE char after counting 20 characters and checking it's not -1
         //if true then replace that space char with a break line char
         //if -1 then string doesn't contain any spaces after 20 chars
         while ( (i = sb.indexOf(" ", i + 20)) != -1) {

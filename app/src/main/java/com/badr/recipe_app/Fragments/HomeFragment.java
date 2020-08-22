@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         getRandomRecipesWithTags(text);
 
         //displaying a toast and debug stuff
-        Toast.makeText(getContext(), "Loading Recipes with: " + text , Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Loading Recipes with: " + text , Toast.LENGTH_SHORT).show();
         Log.d(TAG,"Spinner selected item: " + text);
     }
 

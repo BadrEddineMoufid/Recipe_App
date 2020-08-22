@@ -23,7 +23,14 @@
         android:id="@+id/userFragment"
         android:name="com.badr.recipe_app.Fragments.UserFragment"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.badr.recipe_app.Fragments.DetailsFragment"
@@ -34,4 +41,14 @@
             app:argType="com.badr.recipe_app.Model.Recipe"
             app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/logInFragment"
+        android:name="com.badr.recipe_app.Fragments.LogInFragment"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.badr.recipe_app.Fragments.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>
