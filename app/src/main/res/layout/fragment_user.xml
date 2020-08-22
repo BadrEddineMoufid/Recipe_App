@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="60dp"
-        android:text="Change your name"
+        android:text="Change UserName"
         android:textSize="22sp"
         android:textColor="#151515"
         />
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
-        android:text="Change your Password"
+        android:text="Change Password"
         android:textSize="22sp"
         android:textColor="#151515"
         />
