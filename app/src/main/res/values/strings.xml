@@ -5,6 +5,8 @@
     <string name="instructions">Instructions:</string>
     <string name="summary">Summary:</string>
     <string name="ingredients">Ingredients:</string>
+    <string name="change_your_password">Change your Password</string>
+    <string name="change_your_name">Change your Name</string>
 
     <string-array name="cuisines">
         <item>African</item>

@@ -9,9 +9,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.badr.recipe_app.Model.User;
 import com.badr.recipe_app.R;
 
 public class UserFragment extends Fragment {
@@ -31,8 +34,14 @@ public class UserFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         if(!sharedPreferences.contains("ACCESS_TOKEN")){
             NavHostFragment.findNavController(UserFragment.this).navigate(UserFragmentDirections.actionUserFragmentToRegisterFragment());
+        }else{
+
+            TextView userName = rootView.findViewById(R.id.userFragment_userName);
+            userName.setText(sharedPreferences.getString("USER_NAME", "USER_NAME"));
         }
 
         return rootView;
     }
+
+
 }

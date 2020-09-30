@@ -18,6 +18,7 @@
             android:id="@+id/userFragment_user_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
+
             />
 
         <TextView
@@ -25,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Display User name"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginStart="20dp"
             android:textSize="22sp"
             android:textColor="#151515"
@@ -35,21 +36,56 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Change profile Pic"
+        android:textSize="22sp"
+        android:textColor="#151515"
+        android:padding="10dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
-        android:text="Change UserName"
+        android:layout_marginTop="40dp"
+        android:drawableStart="@drawable/ic_baseline_add_a_photo_24"
+        android:drawablePadding="15dp"
+        />
+
+    <TextView
+        android:drawableStart="@drawable/ic_baseline_person_24"
+        android:drawablePadding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:padding="10dp"
+        android:text="@string/change_your_name"
         android:textSize="22sp"
         android:textColor="#151515"
         />
 
     <TextView
+
+        android:drawableStart="@drawable/ic_baseline_lock_24"
+        android:drawablePadding="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
-        android:text="Change Password"
+        android:text="@string/change_your_password"
         android:textSize="22sp"
         android:textColor="#151515"
+        android:background="?attr/selectableItemBackground"
+        />
+    <TextView
+
+        android:drawableStart="@drawable/ic_exit"
+        android:drawablePadding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Log out"
+        android:textSize="22sp"
+        android:textColor="#151515"
+        android:background="?attr/selectableItemBackground"
         />
 
 </LinearLayout>

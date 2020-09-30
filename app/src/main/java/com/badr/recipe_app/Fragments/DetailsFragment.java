@@ -38,7 +38,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,7 +100,7 @@ public class DetailsFragment extends Fragment {
         }else {
             extendedIngredientList = new ArrayList<>();
             stepList = new ArrayList<>();
-            Snackbar.make(rootView, "an error occurred check logs", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootView, "an error occurred ", Snackbar.LENGTH_LONG).show();
         }
 
         //setting the ui
@@ -177,7 +177,7 @@ public class DetailsFragment extends Fragment {
         //debug
         Log.d(TAG, "url: " + url);
 
-        //API call
+        //fetching similarRecipes
         Call<List<similarRecipe>> getSimilarRecipes = apiInterface.getSimilarRecipes(url, Utils.API_KEY);
         getSimilarRecipes.enqueue(new Callback<List<similarRecipe>>() {
             @Override
