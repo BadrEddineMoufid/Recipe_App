@@ -3,7 +3,7 @@ package com.badr.recipe_app.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class logInResponse {
+public class authResponse {
     @SerializedName("tokens")
     @Expose
     private Tokens tokens;

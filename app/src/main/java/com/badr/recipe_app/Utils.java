@@ -6,4 +6,5 @@ public class Utils {
     public static final String LOGIN_URL = "http://192.168.100.8:9000/api/v1/user/login";
     public static final String LOGIN_URL_LOCALHOST = "http://10.0.2.2:9000/api/v1/user/login";
     public static final String REGISTER_URL_LOCALHOST = "http://10.0.2.2:9000/api/v1/user/register";
+    public static final String FAVORITE_RECIPES_URL_LOCALHOST = "http://10.0.2.2:9000/api/v1/recipes";
 }

@@ -18,7 +18,11 @@
         android:id="@+id/favoritesFragment"
         android:name="com.badr.recipe_app.Fragments.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userFragment"
         android:name="com.badr.recipe_app.Fragments.UserFragment"

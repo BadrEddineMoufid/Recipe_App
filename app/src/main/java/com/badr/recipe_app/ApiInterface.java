@@ -2,8 +2,9 @@ package com.badr.recipe_app;
 
 
 import com.badr.recipe_app.Model.RandomRecipe;
+import com.badr.recipe_app.Model.favoriteRecipes;
 import com.badr.recipe_app.Model.logInRequest;
-import com.badr.recipe_app.Model.logInResponse;
+import com.badr.recipe_app.Model.authResponse;
 import com.badr.recipe_app.Model.registerRequest;
 import com.badr.recipe_app.Model.searchRecipes;
 import com.badr.recipe_app.Model.similarRecipe;
@@ -14,6 +15,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -49,8 +51,11 @@ public interface ApiInterface {
     Call<List<similarRecipe>> getSimilarRecipes(@Url String url, @Query("apiKey") String apiKey);
 
     @POST()
-    Call<logInResponse> logIn(@Url String url, @Body logInRequest logInRequest);
+    Call<authResponse> logIn(@Url String url, @Body logInRequest logInRequest);
 
     @POST()
-    Call<logInResponse> register(@Url String url, @Body registerRequest registerRequest);
+    Call<authResponse> register(@Url String url, @Body registerRequest registerRequest);
+
+    @GET()
+    Call<favoriteRecipes> getFavoriteRecipes(@Url String url, @Header("Authorization") String accessToken);
 }

@@ -1,66 +1,92 @@
 package com.badr.recipe_app.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.badr.recipe_app.ApiClient;
+import com.badr.recipe_app.ApiInterface;
+import com.badr.recipe_app.Model.favoriteRecipes;
 import com.badr.recipe_app.R;
+import com.badr.recipe_app.Utils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoritesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FavoritesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FavoritesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoritesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoritesFragment newInstance(String param1, String param2) {
-        FavoritesFragment fragment = new FavoritesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private SharedPreferences sharedPreferences;
+    private ApiInterface apiInterface;
+    private static final String TAG = "FavoritesFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
+        if(!sharedPreferences.contains("ACCESS_TOKEN")){
+            NavHostFragment.findNavController(FavoritesFragment.this).navigate(FavoritesFragmentDirections.actionFavoritesFragmentToUserFragment());
+            return rootView;
+        }
+        String accessToken = sharedPreferences.getString("ACCESS_TOKEN", "ACCESS_TOKEN");
+
+        Call<favoriteRecipes> getFavoriteRecipes = apiInterface.getFavoriteRecipes(Utils.FAVORITE_RECIPES_URL_LOCALHOST,
+               "Bearer " + accessToken );
+
+        getFavoriteRecipes.enqueue(new Callback<favoriteRecipes>() {
+            @Override
+            public void onResponse(Call<favoriteRecipes> call, Response<favoriteRecipes> response) {
+                switch (response.code()){
+                    case 200:
+                        Log.d(TAG, "favorite recipes response: " + response.body().getFavoriteRecipes().toString() );
+                        break;
+                    case 403:
+                        Log.d(TAG, "access token revoked");
+                        Toast.makeText(getContext(), "Access Token revoked log in", Toast.LENGTH_SHORT).show();
+                        logOut();
+                        break;
+                    case 500:
+                        Toast.makeText(getContext(),"Server Error try again later", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<favoriteRecipes> call, Throwable t) {
+                Log.e(TAG, "Request Failed: " + t.getMessage() );
+                t.printStackTrace();
+                Toast.makeText(getContext(),"Request failed ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return rootView;
+    }
+
+    private void logOut(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("ACCESS_TOKEN");
+        editor.remove("REFRESH_TOKEN");
+        editor.remove("USER_NAME");
+        editor.remove("USER_EMAIL");
+        editor.apply();
     }
 }

@@ -2,15 +2,11 @@ package com.badr.recipe_app.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +18,7 @@ import android.widget.Toast;
 import com.badr.recipe_app.ApiClient;
 import com.badr.recipe_app.ApiInterface;
 import com.badr.recipe_app.Model.logInRequest;
-import com.badr.recipe_app.Model.logInResponse;
+import com.badr.recipe_app.Model.authResponse;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
 
@@ -48,9 +44,9 @@ public class LogInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        //inflating layout
         View rootView =  inflater.inflate(R.layout.fragment_log_in, container, false);
-
+        //setting the views
         EditText email, password;
         Button goToRegisterButton, logInButton;
         email = rootView.findViewById(R.id.log_in_email_input);
@@ -73,10 +69,10 @@ public class LogInFragment extends Fragment {
         logInRequest logInRequest = new logInRequest(email, password);
 
         //making post request to backend with login info
-        Call<logInResponse> logInResponseCall = apiInterface.logIn(Utils.LOGIN_URL_LOCALHOST, logInRequest);
-        logInResponseCall.enqueue(new Callback<logInResponse>() {
+        Call<authResponse> logInResponseCall = apiInterface.logIn(Utils.LOGIN_URL_LOCALHOST, logInRequest);
+        logInResponseCall.enqueue(new Callback<authResponse>() {
             @Override
-            public void onResponse(Call<logInResponse> call, Response<logInResponse> response) {
+            public void onResponse(Call<authResponse> call, Response<authResponse> response) {
                 switch (response.code()){
                     case 200:
                         Log.d(TAG, "loginResponse: "  + response.body());
@@ -98,14 +94,14 @@ public class LogInFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<logInResponse> call, Throwable t) {
+            public void onFailure(Call<authResponse> call, Throwable t) {
                 Log.e(TAG, "Error occurred: " + t.getMessage());
                 Toast.makeText(getContext(), "register request failed ", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setTokens(Response<logInResponse> response) {
+    private void setTokens(Response<authResponse> response) {
         editor = sharedPreferences.edit();
         editor.putString("ACCESS_TOKEN", response.body().getTokens().getAccessToken());
         editor.putString("REFRESH_TOKEN", response.body().getTokens().getRefreshToken());

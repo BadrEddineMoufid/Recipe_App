@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,7 +34,8 @@
             />
     </LinearLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/change_pic_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Change profile Pic"
@@ -44,9 +46,12 @@
         android:layout_marginTop="40dp"
         android:drawableStart="@drawable/ic_baseline_add_a_photo_24"
         android:drawablePadding="15dp"
+        android:textAllCaps="false"
+        android:background="?attr/selectableItemBackground"
         />
 
-    <TextView
+    <Button
+        android:id="@+id/change_username_button"
         android:drawableStart="@drawable/ic_baseline_person_24"
         android:drawablePadding="15dp"
         android:layout_width="wrap_content"
@@ -57,10 +62,12 @@
         android:text="@string/change_your_name"
         android:textSize="22sp"
         android:textColor="#151515"
+        android:textAllCaps="false"
+        android:background="?attr/selectableItemBackground"
         />
 
-    <TextView
-
+    <Button
+        android:id="@+id/change_password_button"
         android:drawableStart="@drawable/ic_baseline_lock_24"
         android:drawablePadding="15dp"
         android:layout_width="wrap_content"
@@ -70,22 +77,26 @@
         android:layout_marginTop="40dp"
         android:text="@string/change_your_password"
         android:textSize="22sp"
+        android:textAllCaps="false"
         android:textColor="#151515"
         android:background="?attr/selectableItemBackground"
         />
-    <TextView
 
-        android:drawableStart="@drawable/ic_exit"
-        android:drawablePadding="15dp"
+    <Button
+        android:id="@+id/logout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="15dp"
+        android:drawableStart="@drawable/ic_baseline_exit_to_app_24"
+        android:drawablePadding="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
-        android:text="Log out"
-        android:textSize="22sp"
-        android:textColor="#151515"
-        android:background="?attr/selectableItemBackground"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Log Out"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="#FFFF"
         />
+
 
 </LinearLayout>
