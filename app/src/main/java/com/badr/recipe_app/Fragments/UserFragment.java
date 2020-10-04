@@ -12,14 +12,16 @@ import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.badr.recipe_app.Model.User;
 import com.badr.recipe_app.R;
 
 public class UserFragment extends Fragment {
 
-
+    private SharedPreferences sharedPreferences;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,17 +33,31 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
 
-        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         if(!sharedPreferences.contains("ACCESS_TOKEN")){
             NavHostFragment.findNavController(UserFragment.this).navigate(UserFragmentDirections.actionUserFragmentToRegisterFragment());
-        }else{
-
-            TextView userName = rootView.findViewById(R.id.userFragment_userName);
-            userName.setText(sharedPreferences.getString("USER_NAME", "USER_NAME"));
+            return rootView;
         }
+
+        TextView userName = rootView.findViewById(R.id.userFragment_userName);
+        userName.setText(sharedPreferences.getString("USER_NAME", "USER_NAME"));
+        Button logOutButton = rootView.findViewById(R.id.logout_button);
+        logOutButton.setOnClickListener(v ->{
+            logOut();
+            Toast.makeText(getContext(),"Logged out ", Toast.LENGTH_SHORT).show();
+            NavHostFragment.findNavController(UserFragment.this).navigate(UserFragmentDirections.actionUserFragmentToLogInFragment());
+        });
 
         return rootView;
     }
+    private void logOut(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("ACCESS_TOKEN");
+        editor.remove("REFRESH_TOKEN");
+        editor.remove("USER_NAME");
+        editor.remove("USER_EMAIL");
+        editor.apply();
 
+    }
 
 }

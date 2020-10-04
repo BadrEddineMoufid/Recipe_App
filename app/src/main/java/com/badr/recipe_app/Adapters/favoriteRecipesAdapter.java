@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,7 +49,7 @@ public class favoriteRecipesAdapter extends RecyclerView.Adapter<favoriteRecipes
         favoriteRecipe currentFavoriteRecipe = favoriteRecipesList.get(position);
 
         holder.recipeTitle.setText(currentFavoriteRecipe.getRecipeTitle());
-        Glide.with(context).load(currentFavoriteRecipe.getRecipeImageUrl()).into(holder.recipeImage);
+        //Glide.with(context).load(currentFavoriteRecipe.getRecipeImageUrl()).into(holder.recipeImage);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class favoriteRecipesAdapter extends RecyclerView.Adapter<favoriteRecipes
         return favoriteRecipesList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView recipeImage;
         TextView recipeTitle;
         public ViewHolder(@NonNull View itemView) {
@@ -65,5 +66,13 @@ public class favoriteRecipesAdapter extends RecyclerView.Adapter<favoriteRecipes
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTitle = itemView.findViewById(R.id.recipe_title);
         }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "item cliked ", Toast.LENGTH_SHORT).show();
+        }
     }
 }
+
+
+
