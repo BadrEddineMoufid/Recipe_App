@@ -94,8 +94,6 @@ public class randomRecipesAdapter extends RecyclerView.Adapter<randomRecipesAdap
             int position = getAdapterPosition();
             Recipe currentRecipe = randomRecipeList.get(position);
 
-            Log.d(TAG, "on item clicked: " + currentRecipe.getTitle() + "\n" + currentRecipe.getSummary());
-
             //navigate to details fragment && passing currentRecipe object to be displayed
             //creating action with currentRecipe
             HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(currentRecipe);

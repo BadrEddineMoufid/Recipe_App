@@ -1,5 +1,7 @@
 package com.badr.recipe_app.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,9 +19,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.badr.recipe_app.Adapters.ingredientAdapter;
 import com.badr.recipe_app.Adapters.instructionsAdapter;
@@ -29,6 +33,9 @@ import com.badr.recipe_app.ApiInterface;
 import com.badr.recipe_app.Model.ExtendedIngredient;
 import com.badr.recipe_app.Model.Recipe;
 import com.badr.recipe_app.Model.Step;
+import com.badr.recipe_app.Model.Tokens;
+import com.badr.recipe_app.Model.favoriteRecipePOST;
+import com.badr.recipe_app.Model.favoriteRecipeResponse;
 import com.badr.recipe_app.Model.similarRecipe;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
@@ -50,7 +57,7 @@ public class DetailsFragment extends Fragment {
     private List<ExtendedIngredient> extendedIngredientList;
     private TextView recipeTitle, recipeScores, summaryTextView;
     private ImageView recipeImage;
-
+    private ImageButton addToFavoritesButton;
     private List<Step> stepList;
     private RecyclerView instructionRecyclerView;
     private instructionsAdapter instructionsAdapter;
@@ -59,6 +66,7 @@ public class DetailsFragment extends Fragment {
     private RecyclerView similarRecipesRecyclerView;
     private similarRecipesAdapter similarRecipesAdapter;
 
+    private SharedPreferences sharedPreferences;
     private ApiInterface apiInterface;
 
     @Override
@@ -66,6 +74,7 @@ public class DetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //apiInterface instance
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
     }
 
     @Override
@@ -141,6 +150,7 @@ public class DetailsFragment extends Fragment {
         recipeScores = rootView.findViewById(R.id.recipe_scores);
         recipeImage = rootView.findViewById(R.id.recipe_image);
         summaryTextView = rootView.findViewById(R.id.summary_textView);
+        addToFavoritesButton = rootView.findViewById(R.id.add_to_favorites_button);
 
         //setting texts
         recipeTitle.setText(recipe.getTitle());
@@ -150,7 +160,10 @@ public class DetailsFragment extends Fragment {
         //clean the summary from html tags before displaying it
         summaryTextView.setText(cleanString(recipe.getSummary()));
 
-
+        //click listener
+        addToFavoritesButton.setOnClickListener(v ->{
+            addToFavorites(recipe);
+        });
 
 
         //setting image
@@ -162,6 +175,39 @@ public class DetailsFragment extends Fragment {
 
 
 
+    }
+
+    private void addToFavorites(Recipe recipe){
+        //retrieving access token
+        String accessToken = sharedPreferences.getString("ACCESS_TOKEN", "ACCESS_TOKEN");
+        favoriteRecipePOST favoriteRecipePOST = new favoriteRecipePOST(recipe.getId(), recipe.getTitle(), recipe.getImage());
+
+        Call<favoriteRecipeResponse> addFavoriteRecipe = apiInterface.addFavoriteRecipe(Utils.FAVORITE_RECIPES_URL_LOCALHOST,
+                "Bearer " + accessToken, favoriteRecipePOST );
+
+        addFavoriteRecipe.enqueue(new Callback<favoriteRecipeResponse>() {
+            @Override
+            public void onResponse(Call<favoriteRecipeResponse> call, Response<favoriteRecipeResponse> response) {
+                switch (response.code()){
+                    case 200:
+                        //Log.d(TAG, "add to favorites response: "+ response.body().toString());
+                        Toast.makeText(getContext(), "Recipe Added to favorites", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 403:
+                        Toast.makeText(getContext(), "You are not logged in", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 500:
+                        Toast.makeText(getContext(), "SERVER ERROR", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<favoriteRecipeResponse> call, Throwable t) {
+                Log.e(TAG, "add to favorites failure : " + t.getMessage() + t.toString());
+                Toast.makeText(getContext(), "An ERROR OCCURRED ", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getSimilarRecipes(View view, Recipe recipe){

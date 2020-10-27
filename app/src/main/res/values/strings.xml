@@ -7,6 +7,11 @@
     <string name="ingredients">Ingredients:</string>
     <string name="change_your_password">Change your Password</string>
     <string name="change_your_name">Change your Name</string>
+    <string name="change_profile_pic">Change profile Pic</string>
+    <string name="log_out">Log Out</string>
+    <string name="user_image">user_image</string>
+    <string name="save">Save</string>
+    <string name="enter_new_user_name">Enter new user name</string>
 
     <string-array name="cuisines">
         <item>African</item>

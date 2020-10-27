@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         //displaying a toast and debug stuff
         Toast.makeText(getContext(), "Loading Recipes with: " + text , Toast.LENGTH_SHORT).show();
-        Log.d(TAG,"Spinner selected item: " + text);
+
     }
 
     @Override

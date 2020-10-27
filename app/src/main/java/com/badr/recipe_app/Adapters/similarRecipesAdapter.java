@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.badr.recipe_app.Fragments.DetailsFragment;
+import com.badr.recipe_app.Fragments.DetailsFragmentArgs;
+import com.badr.recipe_app.Fragments.DetailsFragmentDirections;
 import com.badr.recipe_app.Model.similarRecipe;
 import com.badr.recipe_app.R;
 import com.bumptech.glide.Glide;
@@ -28,7 +31,7 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
         this.context = context;
 
         //debug
-        Log.d(TAG, "similarRecipeList size when constructor called: " + this.similarRecipeList.size());
+        //Log.d(TAG, "similarRecipeList size when constructor called: " + this.similarRecipeList.size());
     }
 
     public void setData(List<similarRecipe> similarRecipeList){
@@ -36,7 +39,7 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
         notifyDataSetChanged();
 
         //debug
-        Log.d(TAG, "similarRecipesList size when setData() is called: " + this.similarRecipeList.size());
+        //Log.d(TAG, "similarRecipesList size when setData() is called: " + this.similarRecipeList.size());
     }
 
     @NonNull
@@ -55,6 +58,7 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
 
         //setting title
         holder.recipeTitle.setText(currentSimilarRecipe.getTitle());
+
         //setting image
         //schema: spoonacular.com/recipeImages/{ID}-{SIZE}.{TYPE}
         String imageUrl = "https://spoonacular.com/recipeImages/"+ currentSimilarRecipe.getId() + "-" + "556x370."
@@ -68,7 +72,7 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
         return similarRecipeList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView recipeTitle;
         ImageView recipeImage;
 
@@ -78,6 +82,15 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
 
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTitle = itemView.findViewById(R.id.recipe_title);
+        }
+
+        @Override
+        public void onClick(View v) {
+//            int position = getAdapterPosition();
+//            similarRecipe currentSimilarRecipe = similarRecipeList.get(position);
+//            DetailsFragmentDirections.ActionDetailsFragmentSelf actionDetailsFragmentSelf = DetailsFragmentDirections.ActionDetailsFragmentSelf(currentSimilarRecipe);
+
+
         }
     }
 }

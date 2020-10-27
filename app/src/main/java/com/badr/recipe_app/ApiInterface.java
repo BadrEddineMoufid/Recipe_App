@@ -2,6 +2,8 @@ package com.badr.recipe_app;
 
 
 import com.badr.recipe_app.Model.RandomRecipe;
+import com.badr.recipe_app.Model.favoriteRecipePOST;
+import com.badr.recipe_app.Model.favoriteRecipeResponse;
 import com.badr.recipe_app.Model.favoriteRecipes;
 import com.badr.recipe_app.Model.logInRequest;
 import com.badr.recipe_app.Model.authResponse;
@@ -58,4 +60,7 @@ public interface ApiInterface {
 
     @GET()
     Call<favoriteRecipes> getFavoriteRecipes(@Url String url, @Header("Authorization") String accessToken);
+
+    @POST()
+    Call<favoriteRecipeResponse> addFavoriteRecipe(@Url String url, @Header("Authorization") String accessToken, @Body favoriteRecipePOST favoriteRecipePOST);
 }

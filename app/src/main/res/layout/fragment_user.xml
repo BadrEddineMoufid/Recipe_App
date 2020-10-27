@@ -19,7 +19,7 @@
             android:id="@+id/userFragment_user_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-
+            android:contentDescription="@string/user_image"
             />
 
         <TextView
@@ -31,6 +31,7 @@
             android:layout_marginStart="20dp"
             android:textSize="22sp"
             android:textColor="#151515"
+
             />
     </LinearLayout>
 
@@ -38,7 +39,7 @@
         android:id="@+id/change_pic_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change profile Pic"
+        android:text="@string/change_profile_pic"
         android:textSize="22sp"
         android:textColor="#151515"
         android:padding="10dp"
@@ -92,7 +93,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:backgroundTint="@color/colorPrimary"
-        android:text="Log Out"
+        android:text="@string/log_out"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:textColor="#FFFF"

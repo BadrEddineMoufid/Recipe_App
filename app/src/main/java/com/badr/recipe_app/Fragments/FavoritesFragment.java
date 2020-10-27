@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.badr.recipe_app.Adapters.favoriteRecipesAdapter;
@@ -28,6 +29,7 @@ import retrofit2.Response;
 
 public class FavoritesFragment extends Fragment {
     private RecyclerView recyclerView;
+    private TextView listEmpty;
     private favoriteRecipesAdapter favoriteRecipesAdapter;
     private SharedPreferences sharedPreferences;
     private ApiInterface apiInterface;
@@ -53,14 +55,22 @@ public class FavoritesFragment extends Fragment {
             return rootView;
         }
 
+        //ui stuff
+        setUi(rootView);
+
+        getFavoriteRecipes();
+
+        return rootView;
+    }
+
+    private void setUi(View rootView){
         recyclerView = rootView.findViewById(R.id.favoriteRecipes_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         favoriteRecipesAdapter = new favoriteRecipesAdapter(getContext());
-
-        getFavoriteRecipes();
-        return rootView;
+        listEmpty = rootView.findViewById(R.id.list_empty);
     }
+
     private void getFavoriteRecipes(){
         String accessToken = sharedPreferences.getString("ACCESS_TOKEN", "ACCESS_TOKEN");
 
@@ -75,6 +85,10 @@ public class FavoritesFragment extends Fragment {
                         Log.d(TAG, "favorite recipes response: " + response.body().getFavoriteRecipes().toString() );
                         recyclerView.setAdapter(favoriteRecipesAdapter);
                         favoriteRecipesAdapter.setData(response.body().getFavoriteRecipes());
+                        if(response.body().getFavoriteRecipes().size() == 0){
+                            listEmpty.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }
                         favoriteRecipesAdapter.notifyDataSetChanged();
                         break;
                     case 403:
@@ -91,7 +105,8 @@ public class FavoritesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<favoriteRecipes> call, Throwable t) {
-                t.printStackTrace();
+                Log.e(TAG, t.toString());
+
                 Toast.makeText(getContext(),"Request failed ", Toast.LENGTH_SHORT).show();
             }
         });

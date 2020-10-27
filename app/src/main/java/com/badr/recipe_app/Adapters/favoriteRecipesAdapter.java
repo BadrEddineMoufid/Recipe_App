@@ -49,7 +49,8 @@ public class favoriteRecipesAdapter extends RecyclerView.Adapter<favoriteRecipes
         favoriteRecipe currentFavoriteRecipe = favoriteRecipesList.get(position);
 
         holder.recipeTitle.setText(currentFavoriteRecipe.getRecipeTitle());
-        //Glide.with(context).load(currentFavoriteRecipe.getRecipeImageUrl()).into(holder.recipeImage);
+
+        Glide.with(context).load(currentFavoriteRecipe.getRecipeImageUrl()).into(holder.recipeImage);
     }
 
     @Override
@@ -63,12 +64,15 @@ public class favoriteRecipesAdapter extends RecyclerView.Adapter<favoriteRecipes
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
+
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTitle = itemView.findViewById(R.id.recipe_title);
         }
 
         @Override
         public void onClick(View v) {
+            Log.d(TAG, "favorite recipe clicked");
             Toast.makeText(context, "item cliked ", Toast.LENGTH_SHORT).show();
         }
     }
