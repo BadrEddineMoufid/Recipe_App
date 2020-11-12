@@ -48,12 +48,10 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
 
 
         //setting data to view
-
-
         holder.ingredientName.setText(cleanIngredientName(currentIngredient.getName() ));
         holder.ingredientAmount.setText(amount);
 
-        Log.d(TAG, "amount : " + amount);
+
     }
 
     @Override
@@ -71,12 +69,14 @@ public class ingredientAdapter extends RecyclerView.Adapter<ingredientAdapter.Vi
         //if -1 then string doesn't contain any spaces after 20 chars
         while ( (i = sb.indexOf(" ", i + 20)) != -1) {
             sb.replace(i, i + 1, "\n");
+
             //debug shiit
-            Log.d(TAG,"sb and index : "  + sb.toString() + " " + i);
+            //Log.d(TAG,"sb and index : "  + sb.toString() + " " + i);
         }
 
         //debug shit
-        Log.d(TAG,"sb: "  +sb.toString());
+        //Log.d(TAG,"sb: "  +sb.toString());
+
         return sb.toString();
     }
 

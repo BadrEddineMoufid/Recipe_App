@@ -17,6 +17,8 @@ import com.badr.recipe_app.Fragments.DetailsFragmentArgs;
 import com.badr.recipe_app.Fragments.DetailsFragmentDirections;
 import com.badr.recipe_app.Model.similarRecipe;
 import com.badr.recipe_app.R;
+import com.badr.recipe_app.recyclerViewClickListener;
+import com.badr.recipe_app.recyclerViewItemClickListener;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -25,21 +27,21 @@ import java.util.List;
 public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAdapter.ViewHolder> {
     private List<similarRecipe> similarRecipeList = new ArrayList<>();
     private Context context;
+    private recyclerViewItemClickListener mListener;
+
     private static final String TAG = "similarRecipesAdapter";
 
-    public similarRecipesAdapter(Context context) {
+    public similarRecipesAdapter(Context context, recyclerViewItemClickListener listener) {
         this.context = context;
+        this.mListener = listener;
 
-        //debug
-        //Log.d(TAG, "similarRecipeList size when constructor called: " + this.similarRecipeList.size());
     }
 
     public void setData(List<similarRecipe> similarRecipeList){
         this.similarRecipeList = similarRecipeList;
         notifyDataSetChanged();
 
-        //debug
-        //Log.d(TAG, "similarRecipesList size when setData() is called: " + this.similarRecipeList.size());
+
     }
 
     @NonNull
@@ -48,7 +50,7 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
         //inflating layout and returning new ViewHolder object
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, mListener);
     }
 
     @Override
@@ -75,10 +77,13 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView recipeTitle;
         ImageView recipeImage;
+        private recyclerViewItemClickListener mListener;
 
-
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, recyclerViewItemClickListener listener) {
             super(itemView);
+            this.mListener = listener;
+
+            itemView.setOnClickListener(this);
 
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTitle = itemView.findViewById(R.id.recipe_title);
@@ -86,10 +91,8 @@ public class similarRecipesAdapter extends RecyclerView.Adapter<similarRecipesAd
 
         @Override
         public void onClick(View v) {
-//            int position = getAdapterPosition();
-//            similarRecipe currentSimilarRecipe = similarRecipeList.get(position);
-//            DetailsFragmentDirections.ActionDetailsFragmentSelf actionDetailsFragmentSelf = DetailsFragmentDirections.ActionDetailsFragmentSelf(currentSimilarRecipe);
-
+            similarRecipe currentSimilarRecipe = similarRecipeList.get(getAdapterPosition());
+            mListener.onClick(currentSimilarRecipe);
 
         }
     }

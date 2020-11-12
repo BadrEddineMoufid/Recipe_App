@@ -24,7 +24,7 @@ public class instructionsAdapter extends RecyclerView.Adapter<instructionsAdapte
         this.context = context;
         this.stepsList = stepsList;
 
-        Log.d(TAG, "steps list: " + stepsList.get(0).getNumber() + stepsList.get(0).getStep());
+        //Log.d(TAG, "steps list: " + stepsList.get(0).getNumber() + stepsList.get(0).getStep());
     }
 
     @NonNull
@@ -43,7 +43,7 @@ public class instructionsAdapter extends RecyclerView.Adapter<instructionsAdapte
         //getting current step
         Step currentStep = stepsList.get(position);
 
-        Log.d(TAG, "steps list: " + currentStep.getNumber() + currentStep.getStep());
+        //Log.d(TAG, "steps list: " + currentStep.getNumber() + currentStep.getStep());
 
         holder.stepNumber.setText(String.valueOf(currentStep.getNumber()));
         holder.stepContent.setText(currentStep.getStep());

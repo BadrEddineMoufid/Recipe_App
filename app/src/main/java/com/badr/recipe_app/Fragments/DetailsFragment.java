@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
@@ -39,6 +40,7 @@ import com.badr.recipe_app.Model.favoriteRecipeResponse;
 import com.badr.recipe_app.Model.similarRecipe;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
+import com.badr.recipe_app.recyclerViewItemClickListener;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -46,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -158,7 +161,11 @@ public class DetailsFragment extends Fragment {
         recipeScores.setText(scores);
 
         //clean the summary from html tags before displaying it
-        summaryTextView.setText(cleanString(recipe.getSummary()));
+        if(recipe.getSummary() != null){
+            summaryTextView.setText(cleanString(recipe.getSummary()));
+        }else{
+            summaryTextView.setText("no summary provided");
+        }
 
         //click listener
         addToFavoritesButton.setOnClickListener(v ->{
@@ -217,19 +224,24 @@ public class DetailsFragment extends Fragment {
 
         similarRecipesRecyclerView.setHasFixedSize(true);
         similarRecipesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        similarRecipesAdapter = new similarRecipesAdapter(getContext());
+
+        recyclerViewItemClickListener listener = (similarRecipe)->{
+            Toast.makeText(getContext(), "item clicked; " + similarRecipe.getTitle(), Toast.LENGTH_SHORT).show();
+            getRecipe(similarRecipe, view);
+        };
+
+        similarRecipesAdapter = new similarRecipesAdapter(getContext(), listener);
+
+
 
         String url = "https://api.spoonacular.com/recipes/" + recipe.getId() + "/similar";
-        //debug
-        Log.d(TAG, "url: " + url);
 
         //fetching similarRecipes
         Call<List<similarRecipe>> getSimilarRecipes = apiInterface.getSimilarRecipes(url, Utils.API_KEY);
         getSimilarRecipes.enqueue(new Callback<List<similarRecipe>>() {
             @Override
             public void onResponse(Call<List<similarRecipe>> call, Response<List<similarRecipe>> response) {
-                //debug
-                Log.d(TAG, "similarRecipesList: " + response.body());
+
 
                 similarRecipeList = response.body();
                 similarRecipesAdapter.setData(similarRecipeList);
@@ -240,11 +252,35 @@ public class DetailsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<similarRecipe>> call, Throwable t) {
-                Log.e(TAG, "on failure : " + t.getMessage() + t.toString());
+                t.printStackTrace();
+                Toast.makeText(getContext(), "request failed ", Toast.LENGTH_SHORT).show();
             }
         });
 
 
+
+    }
+
+    private void getRecipe(similarRecipe similarRecipe, View rootView) {
+        Call<Recipe> getRecipe = apiInterface.getRecipe(similarRecipe.getId(), Utils.API_KEY);
+
+        getRecipe.enqueue(new Callback<Recipe>() {
+            @Override
+            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+                if(response.isSuccessful()){
+                    DetailsFragmentDirections.ActionDetailsFragmentSelf action = DetailsFragmentDirections.actionDetailsFragmentSelf(response.body());
+                    Navigation.findNavController(rootView).navigate(action);
+                }else{
+                    Toast.makeText(getContext(), "request failed status: " + response.code() , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Recipe> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(getContext(), "request failed ", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -257,7 +293,7 @@ public class DetailsFragment extends Fragment {
         result = result.replaceAll("\\.\\s?","\\.\n");
 
         //debug
-        Log.d(TAG, "clean string : " + result);
+        //Log.d(TAG, "clean string : " + result);
 
         return result;
     }

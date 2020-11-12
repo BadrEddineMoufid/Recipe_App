@@ -96,7 +96,7 @@ public class LogInFragment extends Fragment {
             @Override
             public void onFailure(Call<authResponse> call, Throwable t) {
                 Log.e(TAG, "Error occurred: " + t.getMessage());
-                Toast.makeText(getContext(), "register request failed ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "LogIn request failed ", Toast.LENGTH_SHORT).show();
             }
         });
     }

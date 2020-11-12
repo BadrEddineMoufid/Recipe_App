@@ -2,6 +2,7 @@ package com.badr.recipe_app;
 
 
 import com.badr.recipe_app.Model.RandomRecipe;
+import com.badr.recipe_app.Model.Recipe;
 import com.badr.recipe_app.Model.favoriteRecipePOST;
 import com.badr.recipe_app.Model.favoriteRecipeResponse;
 import com.badr.recipe_app.Model.favoriteRecipes;
@@ -19,6 +20,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -49,6 +51,9 @@ public interface ApiInterface {
     @GET("/recipes/random")
     Call<RandomRecipe> getRandomRecipesWithTags(@Query("number")int number, @Query("apiKey") String apiKey, @Query("tags") String tags);
 
+    @GET("/recipes/{id}/information")
+    Call<Recipe> getRecipe(@Path("id") int id, @Query("apiKey") String apiKey);
+
     @GET()
     Call<List<similarRecipe>> getSimilarRecipes(@Url String url, @Query("apiKey") String apiKey);
 
@@ -63,4 +68,6 @@ public interface ApiInterface {
 
     @POST()
     Call<favoriteRecipeResponse> addFavoriteRecipe(@Url String url, @Header("Authorization") String accessToken, @Body favoriteRecipePOST favoriteRecipePOST);
+
+
 }
