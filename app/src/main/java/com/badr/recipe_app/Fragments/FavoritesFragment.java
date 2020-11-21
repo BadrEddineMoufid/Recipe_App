@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +37,12 @@ import static com.badr.recipe_app.Utils.API_KEY;
 
 public class FavoritesFragment extends Fragment {
     private RecyclerView recyclerView;
-    private TextView listEmpty;
     private favoriteRecipesAdapter favoriteRecipesAdapter;
     private SharedPreferences sharedPreferences;
     private ApiInterface apiInterface;
+    private RelativeLayout errorLayout;
+    private Button errorLayoutButton;
+    private TextView errorLayoutTextView;
     private static final String TAG = "FavoritesFragment";
 
 
@@ -56,9 +60,21 @@ public class FavoritesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
+        //setting error layout
+        errorLayout = rootView.findViewById(R.id.error_layout);
+        errorLayoutButton = rootView.findViewById(R.id.error_layout_button);
+        errorLayoutTextView = rootView.findViewById(R.id.error_layout_textview);
+
         if(!sharedPreferences.contains("ACCESS_TOKEN")){
             Toast.makeText(getContext(), "You are not logged in ", Toast.LENGTH_SHORT).show();
-            NavHostFragment.findNavController(FavoritesFragment.this).navigate(FavoritesFragmentDirections.actionFavoritesFragmentToUserFragment());
+
+            //displaying error
+            errorLayout.setVisibility(View.VISIBLE);
+            errorLayoutTextView.setText("Log In to view favorite recipes");
+            errorLayoutButton.setOnClickListener(v->{
+                NavHostFragment.findNavController(FavoritesFragment.this).navigate(FavoritesFragmentDirections.actionFavoritesFragmentToUserFragment());
+
+            });
             return rootView;
         }
 
@@ -83,7 +99,7 @@ public class FavoritesFragment extends Fragment {
 
         favoriteRecipesAdapter = new favoriteRecipesAdapter(getContext(), listener);
 
-        listEmpty = rootView.findViewById(R.id.list_empty);
+
     }
 
     private void getRecipe(favoriteRecipe favoriteRecipe, View rootView) {
@@ -124,8 +140,10 @@ public class FavoritesFragment extends Fragment {
                         recyclerView.setAdapter(favoriteRecipesAdapter);
                         favoriteRecipesAdapter.setData(response.body().getFavoriteRecipes());
                         if(response.body().getFavoriteRecipes().size() == 0){
-                            listEmpty.setVisibility(View.VISIBLE);
+
                             recyclerView.setVisibility(View.GONE);
+                            errorLayout.setVisibility(View.VISIBLE);
+                            errorLayoutTextView.setText("No favorite recipes Yet!!!");
                         }
                         favoriteRecipesAdapter.notifyDataSetChanged();
                         break;

@@ -3,6 +3,7 @@ package com.badr.recipe_app;
 
 import com.badr.recipe_app.Model.RandomRecipe;
 import com.badr.recipe_app.Model.Recipe;
+import com.badr.recipe_app.Model.changePasswordPOST;
 import com.badr.recipe_app.Model.favoriteRecipePOST;
 import com.badr.recipe_app.Model.favoriteRecipeResponse;
 import com.badr.recipe_app.Model.favoriteRecipes;
@@ -15,6 +16,7 @@ import com.badr.recipe_app.Model.similarRecipe;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -69,5 +71,9 @@ public interface ApiInterface {
     @POST()
     Call<favoriteRecipeResponse> addFavoriteRecipe(@Url String url, @Header("Authorization") String accessToken, @Body favoriteRecipePOST favoriteRecipePOST);
 
+    @POST()
+    Call<ResponseBody> changeUserName(@Url String url, @Header("Authorization") String accessToken, @Query("username") String username);
 
+    @POST()
+    Call<ResponseBody> changePassword(@Url String url, @Header("Authorization") String accessToken, @Body changePasswordPOST body);
 }

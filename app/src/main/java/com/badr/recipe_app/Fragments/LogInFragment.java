@@ -22,6 +22,11 @@ import com.badr.recipe_app.Model.authResponse;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +38,7 @@ public class LogInFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private static final String TAG = "LogInFragment";
     private SharedPreferences.Editor editor;
+    private EditText email, password;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +53,7 @@ public class LogInFragment extends Fragment {
         //inflating layout
         View rootView =  inflater.inflate(R.layout.fragment_log_in, container, false);
         //setting the views
-        EditText email, password;
+
         Button goToRegisterButton, logInButton;
         email = rootView.findViewById(R.id.log_in_email_input);
         password = rootView.findViewById(R.id.log_in_password_input);
@@ -65,8 +71,8 @@ public class LogInFragment extends Fragment {
         return rootView;
     }
 
-    private void logIn(String email, String password) {
-        logInRequest logInRequest = new logInRequest(email, password);
+    private void logIn(String email, String passwordString) {
+        logInRequest logInRequest = new logInRequest(email, passwordString);
 
         //making post request to backend with login info
         Call<authResponse> logInResponseCall = apiInterface.logIn(Utils.LOGIN_URL_LOCALHOST, logInRequest);
@@ -85,7 +91,15 @@ public class LogInFragment extends Fragment {
                         NavHostFragment.findNavController(LogInFragment.this).navigate(LogInFragmentDirections.actionLogInFragmentToUserFragment());
                         break;
                     case 400:
-                        Toast.makeText(getContext(),"login failed  ", Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject jsonError = new JSONObject(response.errorBody().string());
+                            password.setError(jsonError.get("error").toString());
+
+                            Toast.makeText(getContext(),"login failed "+ jsonError.get("error").toString(), Toast.LENGTH_SHORT).show();
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         break;
                     case 500:
                         Toast.makeText(getContext(),"server error ", Toast.LENGTH_SHORT).show();

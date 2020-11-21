@@ -12,6 +12,9 @@
     <string name="user_image">user_image</string>
     <string name="save">Save</string>
     <string name="enter_new_user_name">Enter new user name</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="old_password">Old Password:</string>
+    <string name="new_password">New Password:</string>
 
     <string-array name="cuisines">
         <item>African</item>

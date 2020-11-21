@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragments.FavoritesFragment">
+    tools:context=".Fragments.FavoritesFragment"
+
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        >
         <TextView
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
@@ -30,17 +34,40 @@
             android:padding="15dp"
             />
 
+
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
         <TextView
-            android:id="@+id/list_empty"
+            android:id="@+id/error_layout_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No favorites yet !!! "
-            android:textSize="22sp"
-            android:textStyle="italic"
-            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            tools:text="this some test text"
+            android:textSize="24sp"
+            android:layout_margin="10dp"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <Button
+            android:id="@+id/error_layout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log In"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_below="@id/error_layout_textview"
             />
     </RelativeLayout>
 
-</LinearLayout>
+
+</RelativeLayout>
