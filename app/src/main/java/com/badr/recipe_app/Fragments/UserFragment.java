@@ -1,4 +1,4 @@
-package com.badr.recipe_app.Fragments;
+ package com.badr.recipe_app.Fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,7 +23,6 @@ import com.badr.recipe_app.ApiInterface;
 import com.badr.recipe_app.Model.changePasswordPOST;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
-import com.google.gson.JsonObject;
 
 
 import org.json.JSONException;
@@ -85,19 +84,19 @@ public class UserFragment extends Fragment {
         //change username button
         Button changeUserName = rootView.findViewById(R.id.change_username_button);
         changeUserName.setOnClickListener(V->{
-            createPopupDialog(0);
+            createAlertDialog(0);
         });
 
         //change password button
         Button changePasswordButton = rootView.findViewById(R.id.change_password_button);
         changePasswordButton.setOnClickListener(v->{
-            createPopupDialog(1);
+            createAlertDialog(1);
         });
 
         return rootView;
     }
 
-    private void createPopupDialog(int id) {
+    private void createAlertDialog(int id) {
         dialogBuilder = new AlertDialog.Builder(getContext());
 
         if(id == 0){
@@ -178,7 +177,7 @@ public class UserFragment extends Fragment {
 
         if(newUserName.length() <= 6){
             Toast.makeText(getContext(), "input a valid username: > 6 chars", Toast.LENGTH_LONG).show();
-            userNameInput.setError("at least 6 chars");
+            userNameInput.setError("username must be at least 6 chars");
         }else{
             String accessToken = "Bearer " + sharedPreferences.getString("ACCESS_TOKEN","ACCESS_TOKEN");
 

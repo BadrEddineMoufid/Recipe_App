@@ -44,6 +44,10 @@ import com.badr.recipe_app.recyclerViewItemClickListener;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,7 +205,13 @@ public class DetailsFragment extends Fragment {
                         Toast.makeText(getContext(), "Recipe Added to favorites", Toast.LENGTH_SHORT).show();
                         break;
                     case 403:
-                        Toast.makeText(getContext(), "You are not logged in", Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject jsonError = new JSONObject(response.errorBody().string());
+                            Toast.makeText(getContext(), jsonError.getString("error"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
+
                         break;
                     case 500:
                         Toast.makeText(getContext(), "SERVER ERROR", Toast.LENGTH_SHORT).show();

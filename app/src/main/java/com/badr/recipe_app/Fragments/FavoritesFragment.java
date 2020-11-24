@@ -143,7 +143,9 @@ public class FavoritesFragment extends Fragment {
 
                             recyclerView.setVisibility(View.GONE);
                             errorLayout.setVisibility(View.VISIBLE);
+                            errorLayoutButton.setVisibility(View.GONE);
                             errorLayoutTextView.setText("No favorite recipes Yet!!!");
+
                         }
                         favoriteRecipesAdapter.notifyDataSetChanged();
                         break;

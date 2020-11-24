@@ -22,6 +22,11 @@ import com.badr.recipe_app.Model.registerRequest;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,6 +35,8 @@ public class RegisterFragment extends Fragment {
     private ApiInterface apiInterface;
     private SharedPreferences sharedPreferences;
     private static final String TAG = "RegisterFragment";
+    private EditText name, email, passwordInput;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,11 +52,12 @@ public class RegisterFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_register, container, false);
 
         //setting the views
-        EditText name = rootView.findViewById(R.id.register_name_input);
-        EditText email = rootView.findViewById(R.id.register_email_input);
-        EditText password = rootView.findViewById(R.id.register_password_input);
+        name = rootView.findViewById(R.id.register_name_input);
+        email = rootView.findViewById(R.id.register_email_input);
+        passwordInput = rootView.findViewById(R.id.register_password_input);
         Button registerButton = rootView.findViewById(R.id.register_button);
         Button goToLoginButton = rootView.findViewById(R.id.go_to_log_in_button);
+
 
         //click listener for login button
         goToLoginButton.setOnClickListener(v->{
@@ -57,7 +65,7 @@ public class RegisterFragment extends Fragment {
         });
         //click listener for register button
         registerButton.setOnClickListener(v -> {
-           register(name.getText().toString(), email.getText().toString(), password.getText().toString());
+           register(name.getText().toString(), email.getText().toString(), passwordInput.getText().toString());
         });
 
         return rootView;
@@ -80,6 +88,13 @@ public class RegisterFragment extends Fragment {
                         NavHostFragment.findNavController(RegisterFragment.this).navigate(RegisterFragmentDirections.actionRegisterFragmentToUserFragment());
                         break;
                     case 400:
+                        try {
+                            JSONObject jsonError = new JSONObject(response.errorBody().string());
+                            passwordInput.setError(jsonError.getString("error"));
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
+
                         Toast.makeText(getContext(), "registration failed", Toast.LENGTH_SHORT).show();
                         break;
                     case 500:
