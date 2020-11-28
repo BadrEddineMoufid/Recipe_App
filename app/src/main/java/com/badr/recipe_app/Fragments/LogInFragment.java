@@ -21,6 +21,7 @@ import com.badr.recipe_app.Model.logInRequest;
 import com.badr.recipe_app.Model.authResponse;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
+import com.badr.recipe_app.sessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,15 +36,14 @@ import retrofit2.Response;
 public class LogInFragment extends Fragment {
 
     private ApiInterface apiInterface;
-    private SharedPreferences sharedPreferences;
     private static final String TAG = "LogInFragment";
-    private SharedPreferences.Editor editor;
     private EditText email, password;
+    private sessionManager sessionManager ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sessionManager = new sessionManager(getActivity());
 
     }
 
@@ -81,12 +81,10 @@ public class LogInFragment extends Fragment {
             public void onResponse(Call<authResponse> call, Response<authResponse> response) {
                 switch (response.code()){
                     case 200:
-                        Log.d(TAG, "loginResponse: "  + response.body());
+                        //Log.d(TAG, "loginResponse: "  + response.body());
                         //saving the tokens and user info in sharedPreferences
-                        setTokens(response);
+                        sessionManager.logIn(response.body().getUser().getName(), response.body().getUser().getEmail(), response.body().getTokens().getAccessToken(), response.body().getTokens().getRefreshToken());
 
-                        //debug
-                        Log.d(TAG, "shared Preferences: "+ sharedPreferences.getString("ACCESS_TOKEN","ACCESS TOKEN"));
                         //navigating to userFragment after login
                         NavHostFragment.findNavController(LogInFragment.this).navigate(LogInFragmentDirections.actionLogInFragmentToUserFragment());
                         break;
@@ -115,15 +113,7 @@ public class LogInFragment extends Fragment {
         });
     }
 
-    private void setTokens(Response<authResponse> response) {
-        editor = sharedPreferences.edit();
-        editor.putString("ACCESS_TOKEN", response.body().getTokens().getAccessToken());
-        editor.putString("REFRESH_TOKEN", response.body().getTokens().getRefreshToken());
-        editor.putString("USER_NAME", response.body().getUser().getName());
-        editor.putString("USER_EMAIL", response.body().getUser().getEmail());
-        editor.apply();
-        Toast.makeText(getContext(),"Tokens Set, login successful ", Toast.LENGTH_SHORT).show();
-    }
+
 
 
 }

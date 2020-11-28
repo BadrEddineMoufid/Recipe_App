@@ -28,6 +28,7 @@ import com.badr.recipe_app.Model.favoriteRecipes;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
 import com.badr.recipe_app.recyclerViewClickListener;
+import com.badr.recipe_app.sessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +39,7 @@ import static com.badr.recipe_app.Utils.API_KEY;
 public class FavoritesFragment extends Fragment {
     private RecyclerView recyclerView;
     private favoriteRecipesAdapter favoriteRecipesAdapter;
-    private SharedPreferences sharedPreferences;
+    private sessionManager sessionManager;
     private ApiInterface apiInterface;
     private RelativeLayout errorLayout;
     private Button errorLayoutButton;
@@ -51,7 +52,7 @@ public class FavoritesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sessionManager = new sessionManager(getActivity());
 
     }
 
@@ -65,7 +66,7 @@ public class FavoritesFragment extends Fragment {
         errorLayoutButton = rootView.findViewById(R.id.error_layout_button);
         errorLayoutTextView = rootView.findViewById(R.id.error_layout_textview);
 
-        if(!sharedPreferences.contains("ACCESS_TOKEN")){
+        if(!sessionManager.isLoggedIn()){
             Toast.makeText(getContext(), "You are not logged in ", Toast.LENGTH_SHORT).show();
 
             //displaying error
@@ -126,10 +127,9 @@ public class FavoritesFragment extends Fragment {
     }
 
     private void getFavoriteRecipes(){
-        String accessToken = sharedPreferences.getString("ACCESS_TOKEN", "ACCESS_TOKEN");
+        String accessToken = "Bearer " + sessionManager.getAccessToken();
 
-        Call<favoriteRecipes> getFavoriteRecipes = apiInterface.getFavoriteRecipes(Utils.FAVORITE_RECIPES_URL_LOCALHOST,
-                "Bearer " + accessToken );
+        Call<favoriteRecipes> getFavoriteRecipes = apiInterface.getFavoriteRecipes(Utils.FAVORITE_RECIPES_URL_LOCALHOST, accessToken );
 
         getFavoriteRecipes.enqueue(new Callback<favoriteRecipes>() {
             @Override
@@ -152,7 +152,8 @@ public class FavoritesFragment extends Fragment {
                     case 403:
                         Log.d(TAG, "access token revoked");
                         Toast.makeText(getContext(), "Access Token revoked log in", Toast.LENGTH_SHORT).show();
-                        logOut();
+
+                        sessionManager.logOut();
                         NavHostFragment.findNavController(FavoritesFragment.this).navigate(FavoritesFragmentDirections.actionFavoritesFragmentToUserFragment());
                         break;
                     case 500:
@@ -169,15 +170,7 @@ public class FavoritesFragment extends Fragment {
             }
         });
     }
-    private void logOut(){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("ACCESS_TOKEN");
-        editor.remove("REFRESH_TOKEN");
-        editor.remove("USER_NAME");
-        editor.remove("USER_EMAIL");
-        editor.apply();
 
-    }
 }
 
 

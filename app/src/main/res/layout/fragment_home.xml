@@ -16,7 +16,7 @@
             android:layout_height="40dp"
             app:cardCornerRadius="5dp"
             android:backgroundTint="#DEDFE1"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             >
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,11 +28,19 @@
                     android:padding="5dp"
                     />
 
-                <EditText
+                <Button
+                    android:id="@+id/search_for_recipes_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:text="@string/search_for_recipes"
+                    android:textColor="@color/colorPrimary"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
                     />
+
+
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -42,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:text="Random Recipes: "
+            android:text="@string/random_recipes"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:layout_marginBottom="5dp"

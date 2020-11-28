@@ -41,6 +41,7 @@ import com.badr.recipe_app.Model.similarRecipe;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
 import com.badr.recipe_app.recyclerViewItemClickListener;
+import com.badr.recipe_app.sessionManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -73,7 +74,7 @@ public class DetailsFragment extends Fragment {
     private RecyclerView similarRecipesRecyclerView;
     private similarRecipesAdapter similarRecipesAdapter;
 
-    private SharedPreferences sharedPreferences;
+    private sessionManager sessionManager;
     private ApiInterface apiInterface;
 
     @Override
@@ -81,7 +82,7 @@ public class DetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //apiInterface instance
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sessionManager = new sessionManager(getActivity());
     }
 
     @Override
@@ -173,7 +174,7 @@ public class DetailsFragment extends Fragment {
 
         //click listener
         addToFavoritesButton.setOnClickListener(v ->{
-            addToFavorites(recipe);
+            addToFavorites(recipe, rootView);
         });
 
 
@@ -188,43 +189,50 @@ public class DetailsFragment extends Fragment {
 
     }
 
-    private void addToFavorites(Recipe recipe){
+    private void addToFavorites(Recipe recipe, View rootView){
         //retrieving access token
-        String accessToken = sharedPreferences.getString("ACCESS_TOKEN", "ACCESS_TOKEN");
-        favoriteRecipePOST favoriteRecipePOST = new favoriteRecipePOST(recipe.getId(), recipe.getTitle(), recipe.getImage());
+        String accessToken = "Bearer " + sessionManager.getAccessToken();
 
-        Call<favoriteRecipeResponse> addFavoriteRecipe = apiInterface.addFavoriteRecipe(Utils.FAVORITE_RECIPES_URL_LOCALHOST,
-                "Bearer " + accessToken, favoriteRecipePOST );
+        if(!sessionManager.isLoggedIn()){
+            Snackbar snackbar = Snackbar.make(rootView, "Log In to add recipes to favorites", Snackbar.LENGTH_SHORT)
+                    .setAction("Log In", v->{
+                        Navigation.findNavController(rootView).navigate(DetailsFragmentDirections.actionDetailsFragmentToLogInFragment());
+                    });
+            snackbar.show();
+        }else{
+            favoriteRecipePOST favoriteRecipePOST = new favoriteRecipePOST(recipe.getId(), recipe.getTitle(), recipe.getImage());
 
-        addFavoriteRecipe.enqueue(new Callback<favoriteRecipeResponse>() {
-            @Override
-            public void onResponse(Call<favoriteRecipeResponse> call, Response<favoriteRecipeResponse> response) {
-                switch (response.code()){
-                    case 200:
-                        //Log.d(TAG, "add to favorites response: "+ response.body().toString());
-                        Toast.makeText(getContext(), "Recipe Added to favorites", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 403:
-                        try {
-                            JSONObject jsonError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(getContext(), jsonError.getString("error"), Toast.LENGTH_SHORT).show();
-                        } catch (JSONException | IOException e) {
-                            e.printStackTrace();
-                        }
+            Call<favoriteRecipeResponse> addFavoriteRecipe = apiInterface.addFavoriteRecipe(Utils.FAVORITE_RECIPES_URL_LOCALHOST, accessToken, favoriteRecipePOST );
 
-                        break;
-                    case 500:
-                        Toast.makeText(getContext(), "SERVER ERROR", Toast.LENGTH_SHORT).show();
-                        break;
+            addFavoriteRecipe.enqueue(new Callback<favoriteRecipeResponse>() {
+                @Override
+                public void onResponse(Call<favoriteRecipeResponse> call, Response<favoriteRecipeResponse> response) {
+                    switch (response.code()){
+                        case 200:
+                            Snackbar.make(rootView, "Recipe Added to favorites", Snackbar.LENGTH_SHORT).show();
+                            break;
+                        case 403:
+                            try {
+                                JSONObject jsonError = new JSONObject(response.errorBody().string());
+                                Toast.makeText(getContext(), jsonError.getString("error"), Toast.LENGTH_SHORT).show();
+                            } catch (JSONException | IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            break;
+                        case 500:
+                            Toast.makeText(getContext(), "SERVER ERROR", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<favoriteRecipeResponse> call, Throwable t) {
-                Log.e(TAG, "add to favorites failure : " + t.getMessage() + t.toString());
-                Toast.makeText(getContext(), "An ERROR OCCURRED ", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<favoriteRecipeResponse> call, Throwable t) {
+                    Log.e(TAG, "add to favorites failure : " + t.getMessage() + t.toString());
+                    Toast.makeText(getContext(), "An ERROR OCCURRED ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void getSimilarRecipes(View view, Recipe recipe){

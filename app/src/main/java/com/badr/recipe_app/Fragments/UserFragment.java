@@ -23,6 +23,7 @@ import com.badr.recipe_app.ApiInterface;
 import com.badr.recipe_app.Model.changePasswordPOST;
 import com.badr.recipe_app.R;
 import com.badr.recipe_app.Utils;
+import com.badr.recipe_app.sessionManager;
 
 
 import org.json.JSONException;
@@ -37,19 +38,20 @@ import retrofit2.Response;
 
 public class UserFragment extends Fragment {
 
-    private SharedPreferences sharedPreferences;
+
     private AlertDialog.Builder dialogBuilder;
     private ApiInterface apiInterface;
     private AlertDialog alertDialog;
     private static final String TAG = "UserFragment";
     private TextView userName, passwordErrorTextView, usernameMessageTextView;
     private EditText userNameInput;
+    private sessionManager sessionManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sessionManager = new sessionManager(getActivity());
 
     }
 
@@ -61,22 +63,22 @@ public class UserFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
 
         //checking if user is logged in
-
-        if(!sharedPreferences.contains("ACCESS_TOKEN")){
+        if (!sessionManager.isLoggedIn()){
             NavHostFragment.findNavController(UserFragment.this).navigate(UserFragmentDirections.actionUserFragmentToRegisterFragment());
             return rootView;
         }
 
+
         //displaying user's name to UI
         userName = rootView.findViewById(R.id.userFragment_userName);
-        userName.setText(sharedPreferences.getString("USER_NAME", "USER_NAME"));
+        userName.setText(sessionManager.getUserName());
 
 
 
         //logout button
         Button logOutButton = rootView.findViewById(R.id.logout_button);
         logOutButton.setOnClickListener(v ->{
-            logOut();
+            sessionManager.logOut();
             Toast.makeText(getContext(),"Logged out ", Toast.LENGTH_SHORT).show();
             NavHostFragment.findNavController(UserFragment.this).navigate(UserFragmentDirections.actionUserFragmentToLogInFragment());
         });
@@ -133,13 +135,12 @@ public class UserFragment extends Fragment {
     private void changePassword(String oldPassword, String newPassword) {
         //getting accessToken and setting post object
         changePasswordPOST changePasswordPOST = new changePasswordPOST(oldPassword, newPassword);
-        String accessToken = "Bearer " + sharedPreferences.getString("ACCESS_TOKEN","ACCESS_TOKEN");
+        String accessToken = "Bearer " + sessionManager.getAccessToken();
 
         Call<ResponseBody> changePassword = apiInterface.changePassword(Utils.CHANGE_PASSWORD_URL_LOCALHOST, accessToken, changePasswordPOST);
         changePassword.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
 
                 if(response.isSuccessful()){
                     try {
@@ -179,7 +180,7 @@ public class UserFragment extends Fragment {
             Toast.makeText(getContext(), "input a valid username: > 6 chars", Toast.LENGTH_LONG).show();
             userNameInput.setError("username must be at least 6 chars");
         }else{
-            String accessToken = "Bearer " + sharedPreferences.getString("ACCESS_TOKEN","ACCESS_TOKEN");
+            String accessToken = "Bearer " + sessionManager.getAccessToken();
 
             Call<ResponseBody> changeUserName = apiInterface.changeUserName(Utils.CHANGE_USERNAME_URL_LOCALHOST, accessToken, newUserName);
             changeUserName.enqueue(new Callback<ResponseBody>() {
@@ -192,7 +193,7 @@ public class UserFragment extends Fragment {
                             Log.d(TAG, "new username response: " + jsonObject.get("name").toString());
 
                             //updating sharedPreferences
-                            updateSharedPreferences(jsonObject.get("name").toString());
+                            sessionManager.setUserName(jsonObject.getString("name"));
                             //displaying new username
                             userName.setText(jsonObject.get("name").toString());
 
@@ -223,21 +224,6 @@ public class UserFragment extends Fragment {
         }
     }
 
-    private void updateSharedPreferences(String name) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("USER_NAME", name);
-        editor.apply();
-        alertDialog.cancel();
-    }
 
-    private void logOut(){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("ACCESS_TOKEN");
-        editor.remove("REFRESH_TOKEN");
-        editor.remove("USER_NAME");
-        editor.remove("USER_EMAIL");
-        editor.apply();
-
-    }
 
 }

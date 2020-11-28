@@ -30,9 +30,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_name_input"
@@ -40,15 +40,17 @@
             android:layout_height="wrap_content"
             android:hint="Name: "
             android:inputType="text"
+            android:backgroundTint="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_email_input"
@@ -56,6 +58,7 @@
             android:layout_height="wrap_content"
             android:hint="Email: "
             android:inputType="textEmailAddress"
+            android:backgroundTint="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,9 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         app:hintTextColor="@color/colorPrimary"
         app:passwordToggleEnabled="true"
         >
@@ -74,9 +76,9 @@
             android:id="@+id/register_password_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password: "
+            android:hint="@string/password"
             android:inputType="textPassword"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,19 +92,20 @@
         />
 
     <Button
-            android:id="@+id/register_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="20dp"
-            android:text="Register"
-            android:textSize="20sp"
-            android:textColor="@android:color/white"
-            android:background="#0D84FB"
-            android:textAllCaps="false"
-            android:clickable="true"
-            />
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="20dp"
+        android:text="Register"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:backgroundTint="#FFFFFF"
+        />
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -110,7 +113,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:textSize="20sp"
-        android:text="All ready have an account"
+        android:text="@string/all_ready_have_an_account"
         android:textColor="@android:color/black"
 
         />
@@ -120,12 +123,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Log In "
+        android:text="@string/log_in"
         android:textSize="20sp"
-        android:textColor="#0D84FB"
-        android:background="#DCDBDB"
         android:textAllCaps="false"
-        android:clickable="true"
+        android:textColor="#FFFFFF"
+
         />
 
     </LinearLayout>

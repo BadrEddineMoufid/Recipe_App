@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:hint="Email: "
             android:inputType="textEmailAddress"
+            android:backgroundTint="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,9 +60,9 @@
             android:id="@+id/log_in_password_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password: "
+            android:hint="@string/password"
             android:inputType="textPassword"
-
+            android:backgroundTint="@android:color/transparent"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,19 +73,19 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
-        android:text="Log in"
+        android:text="@string/log_in"
         android:textSize="20sp"
         android:textColor="@android:color/white"
-        android:background="#0D84FB"
+
         android:textAllCaps="false"
-        android:clickable="true"
+
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:text="Don't have an account yet"
+        android:text="@string/don_t_have_an_account_yet"
         android:textSize="20sp"
         android:textColor="@android:color/black"
         />
@@ -95,11 +96,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:text="Register "
+        android:text="@string/register"
         android:textSize="20sp"
-        android:textColor="#0D84FB"
-        android:background="#DCDBDB"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="#FFFFFF"
         android:textAllCaps="false"
-        android:clickable="true"
         />
 </LinearLayout>
