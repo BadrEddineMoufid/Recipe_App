@@ -209,7 +209,7 @@ public class DetailsFragment extends Fragment {
                 public void onResponse(Call<favoriteRecipeResponse> call, Response<favoriteRecipeResponse> response) {
                     switch (response.code()){
                         case 200:
-                            Snackbar.make(rootView, "Recipe Added to favorites", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(rootView,"Recipe Added to favorites", Snackbar.LENGTH_SHORT).show();
                             break;
                         case 403:
                             try {

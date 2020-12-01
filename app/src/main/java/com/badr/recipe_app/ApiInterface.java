@@ -30,7 +30,7 @@ public interface ApiInterface {
 
     /**
      * @param query your search query
-     * @param apiKey your apikey
+     * @param apiKey your apiKey
      * @param number number of recipes to get
      * */
 

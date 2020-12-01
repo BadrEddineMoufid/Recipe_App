@@ -166,7 +166,7 @@ public class FavoritesFragment extends Fragment {
             public void onFailure(Call<favoriteRecipes> call, Throwable t) {
                 Log.e(TAG, t.toString());
 
-                Toast.makeText(getContext(),"Request failed ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Request failed ", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -112,7 +112,7 @@ public class UserFragment extends Fragment {
             alertDialog.show();
             saveButton.setOnClickListener(v->{
                 changeUserName(userNameInput.getText().toString());
-
+                alertDialog.cancel();
             });
         }else if(id == 1){
             View view = getLayoutInflater().inflate(R.layout.popup_change_password, null);
@@ -127,6 +127,7 @@ public class UserFragment extends Fragment {
             alertDialog.show();
             saveButton.setOnClickListener(v->{
                 changePassword(oldPassword.getText().toString(), newPassword.getText().toString());
+                alertDialog.cancel();
             });
         }
 

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -64,7 +67,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // Inflate the layout for this fragment
         View rootView = getView()!= null ? getView() : inflater.inflate(R.layout.fragment_home, container, false);
 
-
+        //go to search fragment
+        Button goToSearchFragment = rootView.findViewById(R.id.search_for_recipes_button);
+        goToSearchFragment.setOnClickListener(v->{
+            Navigation.findNavController(rootView).navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment());
+        });
 
         randomRecipesRecyclerView = rootView.findViewById(R.id.random_recipes_recyclerView);
         randomRecipesRecyclerView.setHasFixedSize(true);

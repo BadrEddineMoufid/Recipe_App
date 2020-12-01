@@ -24,6 +24,6 @@
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
         android:maxLines="3"
-
+        android:textAlignment="center"
         />
 </LinearLayout>
