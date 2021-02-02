@@ -106,7 +106,7 @@
                 android:id="@+id/summary_textView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:text="this is a test summary just a fucking test not going to be compiled "
+                tools:text="this is a test summary just a aaaaaaaa test not going to be compiled "
                 android:padding="10dp"
                 android:textSize="17sp"
                 android:textColor="@android:color/secondary_text_light"
